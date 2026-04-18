@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Pencilbeats</title>
+
+<style>
+
+/* BODY */
+body{
+margin:0;
+font-family:Arial;
+background:#eefaf0;
+}
+
+/* WATERMARK */
+body::before{
+content:"";
+position:fixed;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:500px;
+height:500px;
+background:url('logo.png') no-repeat center;
+background-size:contain;
+opacity:0.05;
+z-index:-1;
+}
+
+/* INTRO SCREEN */
+#intro{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#bbf7d0,#86efac);
+color:#064e3b;
+cursor:pointer;
+text-align:center;
+overflow:hidden;
+}
+
+#intro img{
+width:260px;
+animation:float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-15px);}
+100%{transform:translateY(0);}
+}
+
+/* HEADER */
+.header{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+z-index:100;
+}
+
+.header img{width:50px;}
+
+.container{
+margin-top:80px;
+padding:20px;
+}
+
+/* CHAPTER BOX */
+.box{
+background:white;
+padding:25px;
+margin:15px;
+font-size:20px;
+cursor:pointer;
+border-radius:10px;
+transition:0.3s;
+}
+
+.box:hover{
+background:#dcfce7;
+}
+
+/* SLIDES */
+.slide{
+display:flex;
+gap:20px;
+background:white;
+padding:30px;
+border-radius:10px;
+margin-bottom:25px;
+min-height:80vh;
+}
+
+.slide img{
+width:45%;
+border-radius:10px;
+}
+
+.text{
+width:55%;
+font-size:1.2rem;
+line-height:1.8;
+}
+
+/* DIFFERENCE */
+.diff{
+display:flex;
+margin-top:15px;
+}
+
+.diff div{
+width:50%;
+padding:10px;
+}
+
+.left{
+border-right:3px solid green;
+}
+
+.right{
+padding-left:15px;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.slide{flex-direction:column;}
+.slide img,.text{width:100%;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- INTRO -->
+<div id="intro" onclick="start()">
+<img src="logo.png">
+<h1 style="font-size:40px;">Pencilbeats</h1>
+<p>Tap anywhere on the screen to continue</p>
+</div>
+
+<!-- MAIN -->
+<div id="main" style="display:none">
+
+<div class="header">
+<img src="logo.png">
+<h2>Pencilbeats</h2>
+</div>
+
+<div class="container">
+
+<!-- CHAPTER LIST -->
+<div id="home">
+
+<div class="box" onclick="openChapter('c1')">Fundamental Unit of Life</div>
+<div class="box" onclick="openChapter('c2')">Tissues</div>
+<div class="box" onclick="openChapter('c3')">Improvement in Food Resources</div>
+<div class="box" onclick="openChapter('c4')">Drug Abuse & STDs</div>
+
+</div>
+
+<!-- ===================== CHAPTER 1 ===================== -->
+<div id="c1" style="display:none">
+
+<h2>Fundamental Unit of Life</h2>
+
+<div class="slide">
+<img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Animal_cell_structure_en.svg">
+<div class="text">
+<h3>What is a Cell?</h3>
+A cell is the smallest structural and functional unit of life that is capable of carrying out all essential biological processes. Every living organism, whether unicellular or multicellular, is made up of cells. The discovery of the cell was made by Robert Hooke in 1665 when he observed a thin slice of cork under a microscope. Cells arise from pre-existing cells and contain hereditary material that is passed from one generation to another. In unicellular organisms like Amoeba, a single cell performs all life functions, whereas in multicellular organisms, cells are specialized to perform specific tasks. Thus, the cell forms the basic building block of life, responsible for structure, growth, metabolism, and reproduction.
+</div>
+</div>
+
+<div class="slide">
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Prokaryote_cell.svg">
+<div class="text">
+<h3>Types of Cells</h3>
+
+<div class="diff">
+
+<div class="left">
+<h4>Prokaryotic</h4>
+Cells are simple, small, and lack a true nucleus and membrane-bound organelles. Their genetic material is present in a region called the nucleoid. Examples include bacteria and cyanobacteria.
+</div>
+
+<div class="right">
+<h4>Eukaryotic</h4>
+Cells are larger, more complex, and contain a well-defined nucleus enclosed by a nuclear membrane. They also possess membrane-bound organelles such as mitochondria, endoplasmic reticulum, and Golgi apparatus. Eukaryotic cells are found in plants, animals, fungi, and protists.
+</div>
+
+</div>
+
+This classification helps in understanding the evolutionary development of organisms and differences in cellular organization and functions.
+</div>
+</div>
+
+</div>
+
+<!-- ===================== CHAPTER 2 ===================== -->
+<div id="c2" style="display:none">
+<h2>Tissues</h2>
+
+<div class="slide">
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Plant_cell_structure.svg">
+<div class="text">
+<h3>What is a Tissue?</h3>
+A tissue is a group of similar cells that work together to perform a particular function. In simple organisms, one cell does everything, but in complex organisms like plants and humans, work is divided among different cells. This division of labour makes the body more efficient and organized.
+</div>
+</div>
+
+</div>
+
+<!-- ===================== CHAPTER 3 ===================== -->
+<div id="c3" style="display:none">
+<h2>Improvement in Food Resources</h2>
+
+<div class="slide">
+<img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Wheat_close-up.JPG">
+<div class="text">
+<h3>Improvement in Crop Yields</h3>
+Improvement in crop yields refers to the scientific methods used to increase the production and quality of crops to meet the food demands of the growing population...
+</div>
+</div>
+
+</div>
+
+<!-- ===================== CHAPTER 4 ===================== -->
+<div id="c4" style="display:none">
+<h2>Drug Abuse & STDs</h2>
+
+<div class="slide">
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/HIV-budding-Color.jpg">
+<div class="text">
+<h3>What is Drug Abuse?</h3>
+Drug abuse means the use of drugs in a harmful or improper way that negatively affects a person’s body, mind, and behavior...
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function start(){
+document.getElementById("intro").style.display="none";
+document.getElementById("main").style.display="block";
+}
+
+function openChapter(id){
+document.getElementById("home").style.display="none";
+document.getElementById("c1").style.display="none";
+document.getElementById("c2").style.display="none";
+document.getElementById("c3").style.display="none";
+document.getElementById("c4").style.display="none";
+
+document.getElementById(id).style.display="block";
+}
+
+</script>
+
+</body>
+</html>
