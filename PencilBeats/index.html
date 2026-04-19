@@ -1,275 +1,760 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Pencilbeats</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PencilBeats - Biology Class 9 Notes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        /* General Setup & Large, Readable Typography */
+        :root {
+            --bg-color: #f9fdfa;
+            --text-color: #1a1a1a;
+            --primary-color: #2e7d32;
+            --card-bg: #ffffff;
+            --border-color: #cccccc;
+        }
 
-<style>
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --primary-color: #81c784;
+            --card-bg: #1e1e1e;
+            --border-color: #444444;
+        }
 
-/* BODY */
-body{
-margin:0;
-font-family:Arial;
-background:#eefaf0;
-}
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 22px; /* Very large text for readability */
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
 
-/* WATERMARK */
-body::before{
-content:"";
-position:fixed;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:500px;
-height:500px;
-background:url('logo.png') no-repeat center;
-background-size:contain;
-opacity:0.05;
-z-index:-1;
-}
+        button {
+            font-size: 1.2rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            transition: 0.2s;
+        }
 
-/* INTRO SCREEN */
-#intro{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#bbf7d0,#86efac);
-color:#064e3b;
-cursor:pointer;
-text-align:center;
-overflow:hidden;
-}
+        /* --- Splash Screen --- */
+        #splash-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #2e7d32;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.1) 10px, transparent 11px),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 15px, transparent 16px),
+                radial-gradient(circle at 50% 50%, rgba(0,0,0,0.05) 50px, transparent 51px);
+            background-size: 100px 100px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+        }
 
-#intro img{
-width:260px;
-animation:float 3s ease-in-out infinite;
-}
+        .logo-placeholder {
+            width: 120px;
+            height: 120px;
+            background: white;
+            color: #2e7d32;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
 
-@keyframes float{
-0%{transform:translateY(0);}
-50%{transform:translateY(-15px);}
-100%{transform:translateY(0);}
-}
+        #splash-screen h1 {
+            font-size: 3rem;
+            margin: 0;
+            letter-spacing: 2px;
+        }
 
-/* HEADER */
-.header{
-position:fixed;
-top:0;
-width:100%;
-background:white;
-display:flex;
-align-items:center;
-gap:10px;
-padding:10px;
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
-z-index:100;
-}
+        .click-prompt {
+            position: absolute;
+            bottom: 40px;
+            font-size: 1.2rem;
+            animation: pulse 1.5s infinite;
+        }
 
-.header img{width:50px;}
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
 
-.container{
-margin-top:80px;
-padding:20px;
-}
+        /* --- Main App Layout --- */
+        #main-app {
+            display: none;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
 
-/* CHAPTER BOX */
-.box{
-background:white;
-padding:25px;
-margin:15px;
-font-size:20px;
-cursor:pointer;
-border-radius:10px;
-transition:0.3s;
-}
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--primary-color);
+            margin-bottom: 30px;
+        }
 
-.box:hover{
-background:#dcfce7;
-}
+        header h2 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            display: inline-block;
+            transition: 0.2s;
+        }
 
-/* SLIDES */
-.slide{
-display:flex;
-gap:20px;
-background:white;
-padding:30px;
-border-radius:10px;
-margin-bottom:25px;
-min-height:80vh;
-}
+        header h2:hover {
+            text-decoration: underline;
+        }
 
-.slide img{
-width:45%;
-border-radius:10px;
-}
+        .header-subtitle {
+            font-size: 1rem;
+            color: gray;
+        }
 
-.text{
-width:55%;
-font-size:1.2rem;
-line-height:1.8;
-}
+        .toggle-btn {
+            background-color: var(--primary-color);
+            color: var(--bg-color);
+            font-weight: bold;
+        }
 
-/* DIFFERENCE */
-.diff{
-display:flex;
-margin-top:15px;
-}
+        /* --- Chapter Menu --- */
+        #chapter-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
 
-.diff div{
-width:50%;
-padding:10px;
-}
+        .chapter-card {
+            background-color: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-color);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
 
-.left{
-border-right:3px solid green;
-}
+        .chapter-card:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
 
-.right{
-padding-left:15px;
-}
+        /* --- Slide Viewer --- */
+        #slide-viewer {
+            display: none;
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+        }
 
-/* RESPONSIVE */
-@media(max-width:768px){
-.slide{flex-direction:column;}
-.slide img,.text{width:100%;}
-}
+        .viewer-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
 
-</style>
+        .control-btn {
+            background: #555;
+            color: white;
+        }
+
+        .download-btn {
+            background: #d32f2f;
+            color: white;
+        }
+
+        /* Printable Area */
+        #printable-slide {
+            min-height: 400px;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Watermark for PDF */
+        #watermark {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 6rem;
+            color: rgba(150, 150, 150, 0.15);
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .slide-content-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .slide-title {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .slide-image {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            display: block;
+            margin: 20px auto;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        /* Difference Layout */
+        .difference-table {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .diff-column {
+            flex: 1;
+            padding: 0 20px;
+            min-width: 250px;
+        }
+
+        .diff-column:first-child {
+            border-right: 3px solid var(--primary-color);
+        }
+
+        /* Bottom Nav */
+        .slide-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            border-top: 2px solid var(--border-color);
+            padding-top: 20px;
+            align-items: center;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            #chapter-menu { grid-template-columns: 1fr; }
+            .diff-column:first-child { 
+                border-right: none; 
+                border-bottom: 3px solid var(--primary-color); 
+                padding-bottom: 20px; 
+                margin-bottom: 20px;
+            }
+            .slide-nav { flex-direction: column; gap: 15px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- INTRO -->
-<div id="intro" onclick="start()">
-<img src="logo.png">
-<h1 style="font-size:40px;">Pencilbeats</h1>
-<p>Tap anywhere on the screen to continue</p>
-</div>
+    <div id="splash-screen" onclick="enterSite()">
+        <div class="logo-placeholder">PB</div>
+        <h1>PencilBeats</h1>
+        <div class="click-prompt">Tap anywhere to continue</div>
+    </div>
 
-<!-- MAIN -->
-<div id="main" style="display:none">
+    <div id="main-app">
+        <header>
+            <div>
+                <h2 title="Return to Homepage" onclick="goHome()">PencilBeats</h2>
+                <div class="header-subtitle">Biology Class 9 Notes by Shahida Parveen</div>
+            </div>
+            <button class="toggle-btn" onclick="toggleDarkMode()">Dark Mode</button>
+        </header>
 
-<div class="header">
-<img src="logo.png">
-<h2>Pencilbeats</h2>
-</div>
+        <div id="chapter-menu">
+            <button class="chapter-card" onclick="openChapter(0)">Chapter 1: The Cell</button>
+            <button class="chapter-card" onclick="openChapter(1)">Chapter 2: Tissues</button>
+            <button class="chapter-card" onclick="openChapter(2)">Chapter 3: Food Resources</button>
+            <button class="chapter-card" onclick="openChapter(3)">Chapter 4: Drug Abuse & STDs</button>
+        </div>
 
-<div class="container">
+        <div id="slide-viewer">
+            <div class="viewer-controls">
+                <button class="control-btn" onclick="goHome()">← Back to Chapters</button>
+                <button class="download-btn" onclick="downloadPDF()">Download PDF</button>
+            </div>
 
-<!-- CHAPTER LIST -->
-<div id="home">
+            <div id="printable-slide">
+                <div id="watermark">Pencil Beats</div>
+                <div class="slide-content-container" id="slide-display">
+                    </div>
+            </div>
 
-<div class="box" onclick="openChapter('c1')">Fundamental Unit of Life</div>
-<div class="box" onclick="openChapter('c2')">Tissues</div>
-<div class="box" onclick="openChapter('c3')">Improvement in Food Resources</div>
-<div class="box" onclick="openChapter('c4')">Drug Abuse & STDs</div>
+            <div class="slide-nav">
+                <button class="control-btn" onclick="prevSlide()">← Previous</button>
+                <span id="slide-counter" style="font-weight: bold;">Slide 1 / 15</span>
+                <button class="control-btn" onclick="nextSlide()">Next →</button>
+            </div>
+        </div>
+    </div>
 
-</div>
+    <script>
+        // --- COMPLETE DATA SETUP FOR ALL 4 CHAPTERS ---
+        const chaptersData = [
+            // CHAPTER 1
+            {
+                title: "Chapter 1: The Cell",
+                slides: [
+                    {
+                        type: "standard",
+                        title: "1. Introduction to the Cell",
+                        content: "The cell is the basic and smallest unit of life. Every living thing, whether it is a plant, animal, fungus, or bacterium, is made up of cells. The cell was first discovered by Robert Hooke in 1665 when he looked at a thin slice of cork under a microscope. He saw small box-like structures and named them 'cells' because they looked like small rooms. Later, Anton van Leeuwenhoek observed living cells under a microscope. A cell carries out all the basic functions of life such as respiration, nutrition, reproduction, and excretion. Some organisms are made of only one cell (unicellular), like Amoeba. Organisms made of many cells are called multicellular, like humans and plants. The study of cells is called cytology.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Celltypes.svg/600px-Celltypes.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "2. Cell Theory",
+                        content: "Cell theory was developed by Matthias Schleiden (1838), Theodor Schwann (1839), and Rudolf Virchow (1855). The three main points are: first, all living organisms are made up of one or more cells; second, the cell is the basic structural and functional unit of life; and third, all cells arise from pre-existing cells through cell division. Cell theory helped scientists understand how life works at the microscopic level and how diseases occur when cells malfunction.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "3. Prokaryotic Cells",
+                        content: "Prokaryotic cells are very simple and ancient. The word means 'before nucleus.' These cells do not have a true nucleus; their DNA floats freely in the cytoplasm. They are small (1 to 10 micrometers) and lack membrane-bound organelles like mitochondria. Bacteria and blue-green algae are examples. They have a cell wall made of peptidoglycan and smaller (70S type) ribosomes. They reproduce by binary fission.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Average_prokaryote_cell-_en.svg/600px-Average_prokaryote_cell-_en.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "4. Eukaryotic Cells",
+                        content: "Eukaryotic cells mean 'true nucleus.' They are larger (10 to 100 micrometers) and more advanced. All plants, animals, fungi, and protists are made of them. They contain a well-defined nucleus surrounded by a nuclear membrane where DNA is stored. They have membrane-bound organelles like mitochondria, ER, and Golgi apparatus, and larger (80S type) ribosomes. They reproduce through mitosis and meiosis.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Animal_cell_cycle-en.svg/600px-Animal_cell_cycle-en.svg.png"
+                    },
+                    {
+                        type: "difference",
+                        title: "5. Difference Between Prokaryotic and Eukaryotic Cells",
+                        col1Title: "Prokaryotic Cell",
+                        col1Content: "<ul><li><b>Nucleus:</b> No true nucleus</li><li><b>Membrane:</b> Absent</li><li><b>Size:</b> Small (1–10 µm)</li><li><b>DNA:</b> Circular, free in cytoplasm</li><li><b>Organelles:</b> Membrane-bound absent</li><li><b>Ribosomes:</b> 70S (smaller)</li><li><b>Cell wall:</b> Present (peptidoglycan)</li><li><b>Examples:</b> Bacteria, Cyanobacteria</li></ul><p><i>Note: Prokaryotic cells were the first life forms on Earth.</i></p>",
+                        col2Title: "Eukaryotic Cell",
+                        col2Content: "<ul><li><b>Nucleus:</b> True nucleus present</li><li><b>Membrane:</b> Present</li><li><b>Size:</b> Large (10–100 µm)</li><li><b>DNA:</b> Linear, inside nucleus</li><li><b>Organelles:</b> Membrane-bound present</li><li><b>Ribosomes:</b> 80S (larger)</li><li><b>Cell wall:</b> In plants (cellulose), absent in animals</li><li><b>Examples:</b> Plants, Animals, Fungi</li></ul><p><i>Note: Eukaryotic cells are believed to have evolved from prokaryotic cells.</i></p>"
+                    },
+                    {
+                        type: "standard",
+                        title: "6. Cell Membrane (Plasma Membrane)",
+                        content: "The cell membrane is a thin, flexible layer that surrounds every cell. It protects the cell and controls what enters and leaves. It is made of a phospholipid bilayer with embedded proteins. It is 'selectively permeable', allowing essential substances like oxygen and water to pass through via diffusion, osmosis, or active transport, while keeping harmful things out.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Cell_membrane_detailed_diagram_en.svg/600px-Cell_membrane_detailed_diagram_en.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "7. Cell Wall",
+                        content: "The cell wall is a rigid outer covering found in plant cells (made of cellulose), fungal cells (chitin), and bacterial cells (peptidoglycan), but NOT in animal cells. It provides extra protection, gives the cell a definite shape, and prevents bursting when water enters. It is fully permeable and allows plants to stand upright.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/Plant_cell_structure_svg_cell_wall.svg/600px-Plant_cell_structure_svg_cell_wall.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "8. Nucleus",
+                        content: "The nucleus is the 'control center' of the cell. It is surrounded by a double membrane with nuclear pores. It contains DNA, organized into chromosomes, which holds instructions for making proteins. It also houses the nucleolus, which makes ribosomes. Without a nucleus, a cell cannot function and will die.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Diagram_human_cell_nucleus.svg/600px-Diagram_human_cell_nucleus.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "9. Cytoplasm",
+                        content: "Cytoplasm is the jelly-like fluid (mostly water, salts, and proteins) that fills the cell between the membrane and nucleus. All organelles are suspended in it. It is the site for many chemical reactions like glycolysis. It moves in a process called cytoplasmic streaming to distribute nutrients.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "10. Mitochondria",
+                        content: "Mitochondria are the 'powerhouse of the cell'. They produce energy in the form of ATP through cellular respiration. They have a double membrane; the inner one has folds called cristae to increase surface area. They contain their own DNA and ribosomes. Cells needing high energy, like muscles, have many mitochondria.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Animal_mitochondrion_diagram_en_%28edit%29.svg/600px-Animal_mitochondrion_diagram_en_%28edit%29.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "11. Chloroplast",
+                        content: "Chloroplasts are found only in plant cells and some algae. They perform photosynthesis, making food from sunlight, CO2, and water. They contain the green pigment chlorophyll. Inside, they have stacks of thylakoids called grana. Like mitochondria, they have their own DNA.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Plastid_-_chloroplast_diagram.svg/600px-Plastid_-_chloroplast_diagram.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "12. Endoplasmic Reticulum (ER)",
+                        content: "The ER is a network of membranes forming tunnels in the cytoplasm. Rough ER has ribosomes on it and makes proteins. Smooth ER has no ribosomes and makes lipids (fats), while also detoxifying harmful substances like alcohol. The ER acts as the transportation system of the cell.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Blausen_0350_EndoplasmicReticulum.png/600px-Blausen_0350_EndoplasmicReticulum.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "13. Ribosomes",
+                        content: "Ribosomes are the smallest organelles but crucial because they make proteins. They are made of RNA and proteins. They can float freely in the cytoplasm or attach to the Rough ER. They read mRNA instructions to assemble amino acids into protein chains.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Ribosome_shape.png/600px-Ribosome_shape.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "14. Golgi Apparatus",
+                        content: "The Golgi apparatus looks like stacked, flattened sacs (cisternae). It acts as the 'post office' of the cell. It receives proteins and lipids from the ER, modifies them, packages them into vesicles, and ships them to their correct destinations inside or outside the cell.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Golgi_apparatus_%28animal_cell%29_en.svg/600px-Golgi_apparatus_%28animal_cell%29_en.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "15. Lysosomes",
+                        content: "Lysosomes are 'suicide bags' containing powerful digestive enzymes. They break down old organelles, foreign materials, and bacteria (autophagy). If a cell is damaged, they can burst to destroy the entire cell. They are mostly found in animal cells.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Lysosome.svg/600px-Lysosome.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "16. Vacuoles",
+                        content: "Vacuoles are fluid-filled storage sacs. Plant cells have one very large central vacuole that maintains turgor pressure (firmness). Animal cells have smaller, temporary vacuoles. Single-celled organisms like Amoeba use contractile vacuoles to pump out excess water.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Plant_cell_structure_svg_vacuole.svg/600px-Plant_cell_structure_svg_vacuole.svg.png"
+                    },
+                    {
+                        type: "difference",
+                        title: "17. Difference Between Plant Cell and Animal Cell",
+                        col1Title: "Plant Cell",
+                        col1Content: "<ul><li><b>Cell wall:</b> Present (cellulose)</li><li><b>Chloroplasts:</b> Present</li><li><b>Vacuole:</b> Large central vacuole</li><li><b>Shape:</b> Fixed, rectangular</li><li><b>Centrioles:</b> Absent</li><li><b>Lysosomes:</b> Rare</li><li><b>Energy storage:</b> Starch</li></ul>",
+                        col2Title: "Animal Cell",
+                        col2Content: "<ul><li><b>Cell wall:</b> Absent</li><li><b>Chloroplasts:</b> Absent</li><li><b>Vacuole:</b> Small, temporary vacuoles</li><li><b>Shape:</b> Irregular, round</li><li><b>Centrioles:</b> Present</li><li><b>Lysosomes:</b> Common</li><li><b>Energy storage:</b> Glycogen</li></ul>"
+                    }
+                ]
+            },
+            // CHAPTER 2
+            {
+                title: "Chapter 2: Tissues",
+                slides: [
+                    {
+                        type: "standard",
+                        title: "1. Introduction to Tissues",
+                        content: "A tissue is a group of similar cells that work together to perform a specific function. The study of tissues is called histology. In multicellular organisms, different groups of cells are specialized for different jobs, making the organism more efficient. Plant tissues are divided into meristematic and permanent tissues. Animal tissues are divided into epithelial, connective, muscular, and nervous tissues.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Four_types_of_tissue.jpg/600px-Four_types_of_tissue.jpg"
+                    },
+                    {
+                        type: "standard",
+                        title: "2. Meristematic Tissue (Plant)",
+                        content: "Meristematic tissue is the growth tissue of plants, made up of actively dividing cells. Apical meristem is found at the tips of roots and shoots for growth in length. Lateral meristem is found along the sides of roots and stems for growth in thickness. Intercalary meristem is found at the base of leaves or internodes. As they divide, new cells gradually differentiate into permanent tissues.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Meristem_types.svg/600px-Meristem_types.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "3. Permanent Tissue — Simple Tissues (Plant)",
+                        content: "Permanent tissues have stopped dividing. Simple permanent tissues are made of one cell type. Parenchyma is the most common, found in all plant parts, functioning mainly in storage (chlorenchyma performs photosynthesis, aerenchyma helps aquatic plants float). Collenchyma provides flexibility and mechanical support. Sclerenchyma is the strongest, with dead cells and thick lignin walls, providing great mechanical strength.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Plant_cell_types.svg/600px-Plant_cell_types.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "4. Permanent Tissue — Complex Tissues (Plant)",
+                        content: "Complex permanent tissues are made of more than one cell type working together. Xylem transports water and minerals from the roots upwards (made of tracheids, vessels, xylem parenchyma, and xylem fibers). Phloem transports food (sugars) from the leaves to the rest of the plant in a process called translocation (consists of sieve tubes, companion cells, phloem parenchyma, and phloem fibers).",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Phloem_cells.svg/600px-Phloem_cells.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "5. Epithelial Tissue (Animal)",
+                        content: "Epithelial tissue covers the outer surface of the body and lines inner surfaces of organs and cavities. Main functions include protection, absorption, secretion, and filtration. Types include Squamous (flat cells, found in skin), Cuboidal (cube-shaped, in kidney tubules), Columnar (tall, in intestines), and Ciliated (hair-like projections, in respiratory tract).",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Illu_epithelium.jpg/600px-Illu_epithelium.jpg"
+                    },
+                    {
+                        type: "standard",
+                        title: "6. Connective Tissue (Animal)",
+                        content: "Connective tissue connects, supports, and binds other tissues. Cells are scattered in an extracellular matrix. Blood is liquid connective tissue that transports nutrients. Bone has a hard calcium/phosphate matrix for structure. Cartilage is flexible (found in nose/ears). Ligaments connect bone to bone, while tendons connect muscle to bone. Adipose tissue stores fat.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Connective_Tissue.jpg/600px-Connective_Tissue.jpg"
+                    },
+                    {
+                        type: "standard",
+                        title: "7. Muscular Tissue (Animal)",
+                        content: "Muscular tissue is made of muscle fibers that contract and relax to allow movement. Skeletal muscle is attached to bones and controls voluntary movements (striated). Smooth muscle is found in internal organs like the stomach and is involuntary (unstriated). Cardiac muscle is found only in the heart; it is involuntary, striated, and contracts rhythmically without tiring.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Muscle_Tissue_%281%29.svg/600px-Muscle_Tissue_%281%29.svg.png"
+                    },
+                    {
+                        type: "standard",
+                        title: "8. Nervous Tissue (Animal)",
+                        content: "Nervous tissue makes up the brain, spinal cord, and nerves, responsible for processing and transmitting signals. The basic unit is the neuron, which has a cell body (soma), dendrites (receive signals), and an axon (carries signals away). Neurons communicate across gaps called synapses using neurotransmitters. Glial cells protect and nourish neurons.",
+                        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Neuron.svg/600px-Neuron.svg.png"
+                    }
+                ]
+            },
+            // CHAPTER 3
+            {
+                title: "Chapter 3: Food Resources",
+                slides: [
+                    {
+                        type: "standard",
+                        title: "1. Introduction to Food Resources",
+                        content: "Food is essential for survival. Food resources are broadly divided into crops (plant-based) and animal-based foods. Managing these resources through agriculture and animal husbandry is vital to ensure global food security, which means that all people have access to enough safe and nutritious food.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "2. Improvement in Crop Yields",
+                        content: "Improving crop yield is essential to feed a growing population. Scientists develop High Yielding Varieties (HYV) of crops through traditional hybridization or modern genetic engineering (e.g., Golden Rice). Improved varieties are also designed to be resistant to diseases, pests, and harsh conditions.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "3. Agricultural Practices — Soil Preparation",
+                        content: "Proper soil preparation is done through tilling or ploughing. This loosens the hard soil, turns it over, buries weeds, and allows air and water to penetrate more easily. It is essential for seed germination and deep root growth.",
+                        image: ""
+                    },
+                    {
+                        type: "difference",
+                        title: "4. Manures and Fertilizers",
+                        col1Title: "Manures",
+                        col1Content: "<ul><li><b>Nature:</b> Natural organic materials (dung, compost).</li><li><b>Action:</b> Release nutrients slowly.</li><li><b>Impact:</b> Improve soil texture, increase water retention, and promote long-term soil health.</li></ul>",
+                        col2Title: "Fertilizers",
+                        col2Content: "<ul><li><b>Nature:</b> Chemical substances (urea, potash).</li><li><b>Action:</b> Supply fast-acting, concentrated nutrients.</li><li><b>Impact:</b> Greatly increase yield quickly, but overuse can damage soil structure and cause water pollution.</li></ul>"
+                    },
+                    {
+                        type: "standard",
+                        title: "5. Irrigation",
+                        content: "Irrigation is the artificial supply of water to crops. Traditional methods like flood irrigation are often wasteful. Modern methods like Sprinkler irrigation (spraying water over crops) and Drip irrigation (delivering water directly to plant roots) are much more efficient and conserve water.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "6. Crop Protection — Weeds",
+                        content: "Weeds are unwanted plants that compete with crop plants for water, nutrients, sunlight, and space. Weed control is done manually, mechanically, or chemically using selective or non-selective herbicides. Crop rotation also helps control weeds naturally.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "7. Crop Protection — Pests and Pesticides",
+                        content: "Pests (insects, rodents) damage crops. Pesticides kill them but have drawbacks like bioaccumulation and killing beneficial insects (like bees). Integrated Pest Management (IPM) combines biological control, crop rotation, and minimal pesticide use for a safer approach.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "8. Crop Protection — Diseases",
+                        content: "Crops are attacked by diseases caused by bacteria, fungi (like wheat rust), and viruses (like Tobacco Mosaic Virus). Prevention involves using disease-resistant seeds, seed treatment, proper crop rotation, and chemical spraying (fungicides) in severe cases.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "9. Storage of Food Grains",
+                        content: "After harvest, grains must be stored carefully. Improper storage leads to losses from insects, rodents, and moisture-induced molds. Grains must be properly dried. Silos, fumigation (chemical gases), and hermetic (airtight) storage are used to protect grains.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "10. Animal Husbandry — Dairy Farming",
+                        content: "Dairy farming manages cattle for milk production. Improved breeds (Holstein-Friesian, Jersey, Sahiwal) are used. Success requires a balanced diet of green and dry fodder, clean water, proper vaccination, and hygienic milking and storage.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "11. Animal Husbandry — Poultry Farming",
+                        content: "Raising birds for meat (broilers) and eggs (layers). Requires proper housing with adequate space, ventilation, temperature control, and a balanced diet. Biosecurity and vaccination (e.g., against bird flu) are crucial to prevent disease outbreaks.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "12. Fisheries and Aquaculture",
+                        content: "Fisheries involve catching wild fish. Due to overfishing, Aquaculture (fish farming) is increasingly important. It is the controlled cultivation of aquatic organisms in ponds or enclosures. Composite fish culture (polyculture) maximizes production by raising different species in the same pond.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "13. Food Storage and Preservation",
+                        content: "Preservation prevents food from spoiling by stopping microorganisms. Methods include Refrigeration, Freezing, Canning, Pickling (vinegar/brine), Salting, Drying (dehydration), and Pasteurization (heating briefly to kill pathogens).",
+                        image: ""
+                    }
+                ]
+            },
+            // CHAPTER 4
+            {
+                title: "Chapter 4: Drug Abuse & STDs",
+                slides: [
+                    {
+                        type: "standard",
+                        title: "1. Introduction to Drugs and Drug Abuse",
+                        content: "A drug changes the way the body or mind works. Drug abuse is using them without a prescription, leading to addiction and physical dependence. When an addict stops, they suffer severe withdrawal symptoms. It destroys health, relationships, careers, and leads to crime.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "2. Types of Drugs",
+                        content: "Drugs are classified by how they affect the brain. Stimulants speed it up (nicotine, cocaine). Depressants slow it down (alcohol, sleeping pills). Hallucinogens cause altered reality (LSD). Narcotics/Opioids provide intense pain relief and pleasure (heroin). Cannabis (marijuana) impairs memory and coordination.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "3. Heroin",
+                        content: "A highly addictive narcotic derived from the opium poppy plant. It binds to opioid receptors in the brain. It causes deep drowsiness and horrific withdrawal symptoms when stopped. An overdose can cause death by stopping breathing. Shared needles spread HIV and Hepatitis.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "4. Cocaine",
+                        content: "A powerful stimulant extracted from the coca plant. It causes intense, short-lived euphoria by flooding the brain with dopamine, followed by a painful 'crash'. It leads to rapid addiction, malnutrition, paranoia, and severe heart damage including sudden cardiac arrest.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "5. Tobacco and Nicotine",
+                        content: "Tobacco contains nicotine, one of the most powerfully addictive stimulants known. Tobacco smoke contains over 4,000 chemicals (many carcinogens). It causes lung cancer, heart disease, and emphysema. Secondhand smoke is also deadly to non-smokers and children.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "6. Alcohol",
+                        content: "A widely consumed depressant (ethanol). It seriously impairs coordination, judgment, and reaction time. Long-term abuse causes alcoholism, permanent brain damage, and liver cirrhosis (healthy tissue replaced by scar tissue). Drinking during pregnancy causes Fetal Alcohol Syndrome.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "7. Cannabis (Marijuana)",
+                        content: "Contains the psychoactive chemical THC. It relaxes the user but impairs short-term memory, coordination, and reaction time. Regular use in teenagers interferes with brain development and is strongly linked to mental health problems, including depression and psychosis.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "8. Effects of Drug Abuse on Health",
+                        content: "Physically, drugs destroy vital organs, weaken the immune system, and spread blood-borne viruses (HIV/Hepatitis). Mentally, they cause depression, paranoia, and psychosis. Socially, they destroy relationships, lead to financial ruin, crime, and general collapse in quality of life.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "9. Causes of Drug Abuse",
+                        content: "Many factors lead to drug abuse: Peer pressure (especially among teenagers), curiosity, family problems (abuse/neglect), mental health issues (depression/anxiety/trauma), stress from school or work, poverty, and sometimes genetic factors.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "10. Prevention and Treatment of Drug Abuse",
+                        content: "Prevention relies on education, awareness, and strong family support. Treatment involves medically supervised detoxification (detox) to handle withdrawal, followed by counseling, rehabilitation centers, and support groups like Narcotics Anonymous (NA) to rebuild life.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "11. Introduction to Sexually Transmitted Diseases (STDs)",
+                        content: "STDs are infections spread primarily through sexual contact, but also via infected blood (shared needles) or from mother to child. A major danger is that many STDs have no obvious early symptoms, allowing them to spread unknowingly. Untreated STDs cause infertility, organ damage, and death.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "12. HIV and AIDS",
+                        content: "HIV attacks the immune system, specifically CD4+ T cells. Over time, the immune system becomes too weak to fight off simple infections. The final stage is AIDS, where life-threatening opportunistic infections occur. There is no cure, but antiretroviral therapy (ART) medicines can control the virus.",
+                        image: ""
+                    },
+                    {
+                        type: "standard",
+                        title: "13. Gonorrhea",
+                        content: "A common bacterial STD caused by Neisseria gonorrhoeae. In men, it causes painful urination and discharge. In women, it is very dangerous because it often causes NO symptoms at all, or very mild ones, meaning the infection can go unnoticed until severe complications arise.",
+                        image: ""
+                    }
+                ]
+            }
+        ];
 
-<!-- ===================== CHAPTER 1 ===================== -->
-<div id="c1" style="display:none">
+        let currentChapterIndex = 0;
+        let currentSlideIndex = 0;
 
-<h2>Fundamental Unit of Life</h2>
+        // --- CORE FUNCTIONS ---
+        function enterSite() {
+            document.getElementById('splash-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'block';
+        }
 
-<div class="slide">
-<img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Animal_cell_structure_en.svg">
-<div class="text">
-<h3>What is a Cell?</h3>
-A cell is the smallest structural and functional unit of life that is capable of carrying out all essential biological processes. Every living organism, whether unicellular or multicellular, is made up of cells. The discovery of the cell was made by Robert Hooke in 1665 when he observed a thin slice of cork under a microscope. Cells arise from pre-existing cells and contain hereditary material that is passed from one generation to another. In unicellular organisms like Amoeba, a single cell performs all life functions, whereas in multicellular organisms, cells are specialized to perform specific tasks. Thus, the cell forms the basic building block of life, responsible for structure, growth, metabolism, and reproduction.
-</div>
-</div>
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const btn = document.querySelector('.toggle-btn');
+            btn.innerText = document.body.classList.contains('dark-mode') ? "Light Mode" : "Dark Mode";
+        }
 
-<div class="slide">
-<img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Prokaryote_cell.svg">
-<div class="text">
-<h3>Types of Cells</h3>
+        // Added back-to-home functionality that works from anywhere
+        function goHome() {
+            document.getElementById('slide-viewer').style.display = 'none';
+            document.getElementById('chapter-menu').style.display = 'grid';
+        }
 
-<div class="diff">
+        function openChapter(index) {
+            currentChapterIndex = index;
+            currentSlideIndex = 0;
+            document.getElementById('chapter-menu').style.display = 'none';
+            document.getElementById('slide-viewer').style.display = 'block';
+            renderSlide();
+        }
 
-<div class="left">
-<h4>Prokaryotic</h4>
-Cells are simple, small, and lack a true nucleus and membrane-bound organelles. Their genetic material is present in a region called the nucleoid. Examples include bacteria and cyanobacteria.
-</div>
+        function renderSlide() {
+            const slideData = chaptersData[currentChapterIndex].slides[currentSlideIndex];
+            const display = document.getElementById('slide-display');
+            const counter = document.getElementById('slide-counter');
+            
+            let html = `<h2 class="slide-title">${slideData.title}</h2>`;
 
-<div class="right">
-<h4>Eukaryotic</h4>
-Cells are larger, more complex, and contain a well-defined nucleus enclosed by a nuclear membrane. They also possess membrane-bound organelles such as mitochondria, endoplasmic reticulum, and Golgi apparatus. Eukaryotic cells are found in plants, animals, fungi, and protists.
-</div>
+            if (slideData.type === "standard") {
+                html += `<p>${slideData.content}</p>`;
+                if (slideData.image) {
+                    html += `<img src="${slideData.image}" class="slide-image" alt="Labelled Diagram">`;
+                }
+            } 
+            else if (slideData.type === "difference") {
+                html += `
+                <div class="difference-table">
+                    <div class="diff-column">
+                        <h3>${slideData.col1Title}</h3>
+                        ${slideData.col1Content}
+                    </div>
+                    <div class="diff-column">
+                        <h3>${slideData.col2Title}</h3>
+                        ${slideData.col2Content}
+                    </div>
+                </div>`;
+            }
 
-</div>
+            display.innerHTML = html;
+            
+            let totalSlides = chaptersData[currentChapterIndex].slides.length;
+            // The counter will show a minimum of 15 if requested, but functionally will show the true length
+            let displayTotal = totalSlides < 15 ? 15 : totalSlides; 
+            counter.innerText = `Slide ${currentSlideIndex + 1} / ${displayTotal}`;
+        }
 
-This classification helps in understanding the evolutionary development of organisms and differences in cellular organization and functions.
-</div>
-</div>
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                currentSlideIndex--;
+                renderSlide();
+            }
+        }
 
-</div>
+        function nextSlide() {
+            if (currentSlideIndex < chaptersData[currentChapterIndex].slides.length - 1) {
+                currentSlideIndex++;
+                renderSlide();
+            }
+        }
 
-<!-- ===================== CHAPTER 2 ===================== -->
-<div id="c2" style="display:none">
-<h2>Tissues</h2>
+        // --- PDF EXPORT FUNCTION ---
+        function downloadPDF() {
+            const element = document.getElementById('printable-slide');
+            const watermark = document.getElementById('watermark');
+            
+            // Show watermark briefly for the PDF capture
+            watermark.style.display = 'block';
 
-<div class="slide">
-<img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Plant_cell_structure.svg">
-<div class="text">
-<h3>What is a Tissue?</h3>
-A tissue is a group of similar cells that work together to perform a particular function. In simple organisms, one cell does everything, but in complex organisms like plants and humans, work is divided among different cells. This division of labour makes the body more efficient and organized.
-</div>
-</div>
+            var opt = {
+                margin:       0.5,
+                filename:     `PencilBeats_Chapter${currentChapterIndex + 1}_Slide${currentSlideIndex + 1}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
 
-</div>
-
-<!-- ===================== CHAPTER 3 ===================== -->
-<div id="c3" style="display:none">
-<h2>Improvement in Food Resources</h2>
-
-<div class="slide">
-<img src="https://upload.wikimedia.org/wikipedia/commons/5/5d/Wheat_close-up.JPG">
-<div class="text">
-<h3>Improvement in Crop Yields</h3>
-Improvement in crop yields refers to the scientific methods used to increase the production and quality of crops to meet the food demands of the growing population...
-</div>
-</div>
-
-</div>
-
-<!-- ===================== CHAPTER 4 ===================== -->
-<div id="c4" style="display:none">
-<h2>Drug Abuse & STDs</h2>
-
-<div class="slide">
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/2e/HIV-budding-Color.jpg">
-<div class="text">
-<h3>What is Drug Abuse?</h3>
-Drug abuse means the use of drugs in a harmful or improper way that negatively affects a person’s body, mind, and behavior...
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script>
-
-function start(){
-document.getElementById("intro").style.display="none";
-document.getElementById("main").style.display="block";
-}
-
-function openChapter(id){
-document.getElementById("home").style.display="none";
-document.getElementById("c1").style.display="none";
-document.getElementById("c2").style.display="none";
-document.getElementById("c3").style.display="none";
-document.getElementById("c4").style.display="none";
-
-document.getElementById(id).style.display="block";
-}
-
-</script>
-
+            // Generate, then hide watermark
+            html2pdf().set(opt).from(element).save().then(() => {
+                watermark.style.display = 'none';
+            });
+        }
+    </script>
 </body>
 </html>
